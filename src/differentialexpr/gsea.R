@@ -29,10 +29,10 @@ opt = parse_args(opt_parser);
 ####read in data and convert to entrez ID
 data <- read.table(opt$deseq2_mat, sep = "\t", header = TRUE, row.names = 1)
 data <- na.omit(data)
-geneList <- data$log2FoldChange
-geneList <- sort(geneList, decreasing = TRUE)
+geneList <- sign(data$log2FoldChange) * (-log10(data$pvalue))
 GeneIDSymbol <- toTable(org.Hs.egSYMBOL)
 names(geneList) <- GeneIDSymbol[match(data[,1],GeneIDSymbol$symbol),'gene_id']
+geneList <- sort(geneList, decreasing = TRUE)
 geneList <- geneList[!duplicated(names(geneList))]
 
 ####function of GO enrichment
