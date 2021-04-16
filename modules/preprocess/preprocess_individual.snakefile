@@ -31,17 +31,6 @@ def DownsamplingOrNot(bam_stat):
     seq_num = int(sequences.split(":")[1].replace("\t","").replace("\n",""))/1000000
     return seq_num
 
-def getHousekeepingBam(hk):
-    if hk == "house_keeping":
-      return "analysis/star/{sample}/{sample}_downsampling_housekeeping.bam"
-    #else:
-      #return "analysis/star/{sample}/{sample}_downsampling.bam"
-
-def getHousekeepingBai(hk):
-    if hk == "house_keeping":
-       return "analysis/star/{sample}/{sample}_downsampling_housekeeping.bam.bai"
-    #else:
-      #return "analysis/star/{sample}/{sample}_downsampling.bam.bai"
 
 
 def preprocess_individual_targets(wildcards):
@@ -86,19 +75,7 @@ def getHousekeepingBai(hk):
        return "analysis/star/{sample}/{sample}_downsampling_housekeeping.bam.bai"
     else:
       return "analysis/star/{sample}/{sample}_downsampling.bam.bai"
-'''
-def getHousekeepingBam(hk):
-    if hk == "house_keeping":
-      return "analysis/star/{sample}/{sample}.sorted.bam"
-    else:
-      return "analysis/star/{sample}/{sample}.sorted.bam"
 
-def getHousekeepingBai(hk):
-    if hk == "house_keeping":
-       return "analysis/star/{sample}/{sample}.sorted.bam.bai"
-    else:
-      return "analysis/star/{sample}/{sample}.sorted.bam.bai"
-'''
 #---------------------STAR alignment rules-------------------------#
 rule star_align:
   """star alignment for RNA-Seq raw data"""
@@ -241,28 +218,7 @@ rule Downsampling_HouseKeeping:
         "bedtools intersect -a {input.bam} -b {params.housekeeping_bed} > {output.downsampling_hp_bam} && "
         "samtools index {output.downsampling_hp_bam} > {output.Downsampling_hp_bai}"
 
-
-'''
-rule Downsampling_HouseKeeping:
-    input:
-        bam = "analysis/star/{sample}/{sample}.sorted.bam",
-        stat_tmp = "analysis/star/{sample}/{sample}.sorted.bam.stat.txt"
-    output:
-        downsampling_hp_bam = "analysis/rseqc/{sample}/{sample}_downsampling_housekeeping.bam",
-        Downsampling_hp_bai = "analysis/rseqc/{sample}/{sample}_downsampling_housekeeping.bam.bai"
-    message:
-        "Running Downsampling on house keeping genes"
-    params:
-        housekeeping_bed = config["housekeeping_bed_path"]
-    log:
-        "logs/rseqc/{sample}.downsampling_housekeeping.log"
-    benchmark:
-        "benchmarks/rseqc/{sample}.downsampling_housekeeping.benchmark"
-    shell:
-        "bedtools intersect -a {input.bam} -b {params.housekeeping_bed} > {output.downsampling_hp_bam} && "
-        "samtools index {output.downsampling_hp_bam} > {output.Downsampling_hp_bai}"
-
- '''       
+     
 rule tin_score:
     input:
         bam = getHousekeepingBam,
