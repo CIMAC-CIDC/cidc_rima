@@ -100,34 +100,34 @@ def all_targets(wildcards):
         ls.extend(environment_targets(wildcards))
     if execution["preprocess_individual"]:
         ls.extend(preprocess_individual_targets(wildcards))
-    if execution["preprocess_cohort"]:
-        ls.extend(preprocess_cohort_targets(wildcards))
-    if execution["differential_expression_cohort"]:
-        ls.extend(diffexpr_targets(wildcards))
-    if execution["immune_infiltration_cohort"]:
-        ls.extend(immune_infiltration_targets(wildcards))
+    #if execution["preprocess_cohort"]:
+        #ls.extend(preprocess_cohort_targets(wildcards))
+    #if execution["differential_expression_cohort"]:
+        #ls.extend(diffexpr_targets(wildcards))
+    #if execution["immune_infiltration_cohort"]:
+        #ls.extend(immune_infiltration_targets(wildcards))
     if execution["mutation_individual"]:
         ls.extend(mutation_individual_targets(wildcards))
-    if execution["mutation_cohort"]:
-        ls.extend(mutation_cohort_targets(wildcards))
+    #if execution["mutation_cohort"]:
+        #ls.extend(mutation_cohort_targets(wildcards))
     if execution["immune_response_individual"]:
         ls.extend(immune_response_individual_targets(wildcards))
-    if execution["immune_response_cohort"]:
-        ls.extend(immune_response_cohort_targets(wildcards))
+    #if execution["immune_response_cohort"]:
+        #ls.extend(immune_response_cohort_targets(wildcards))
     if execution["immune_repertoire_individual"]:
         ls.extend(immune_repertoire_individual_targets(wildcards))
-    if execution["immune_repertoire_cohort"]:
-        ls.extend(immune_repertoire_cohort_targets(wildcards))
+    #if execution["immune_repertoire_cohort"]:
+        #ls.extend(immune_repertoire_cohort_targets(wildcards))
     if execution["neoantigen_individual"]:
         ls.extend(neoantigen_individual_targets(wildcards))
-    if execution["neoantigen_cohort"]:
-        ls.extend(neoantigen_cohort_targets(wildcards))
+    #if execution["neoantigen_cohort"]:
+        #ls.extend(neoantigen_cohort_targets(wildcards))
     if execution["microbiome_individual"]:
         ls.extend(microbiome_individual_targets(wildcards))
-    if execution["microbiome_cohort"]:
-        ls.extend(microbiome_cohort_targets(wildcards))    
-    if execution["report"]:
-        ls.extend(report_targets(wildcards))
+    #if execution["microbiome_cohort"]:
+        #ls.extend(microbiome_cohort_targets(wildcards))    
+    #if execution["report"]:
+        #ls.extend(report_targets(wildcards))
     return ls
 
 
@@ -140,31 +140,31 @@ if execution["environment"]:
     include: "./modules/environment/environment.snakefile"
 if execution["preprocess_individual"]:
     include: "./modules/preprocess/preprocess_individual.snakefile"
-if execution["preprocess_cohort"]:
-    include: "./modules/preprocess/preprocess_cohort.snakefile"
-if execution["differential_expression_cohort"]:
-    include: "./modules/differential_expression/differential_expression_cohort.snakefile"
-if execution["immune_infiltration_cohort"]:
-    include: "./modules/immune_infiltration/immune_infiltration_cohort.snakefile"
+#if execution["preprocess_cohort"]:
+    #include: "./modules/preprocess/preprocess_cohort.snakefile"
+#if execution["differential_expression_cohort"]:
+    #include: "./modules/differential_expression/differential_expression_cohort.snakefile"
+#if execution["immune_infiltration_cohort"]:
+    #include: "./modules/immune_infiltration/immune_infiltration_cohort.snakefile"
 if execution["mutation_individual"]:
     include: "./modules/mutation/mutation_individual.snakefile"
-if execution["mutation_cohort"]:
-    include: "./modules/mutation/mutation_cohort.snakefile"
+#if execution["mutation_cohort"]:
+    #include: "./modules/mutation/mutation_cohort.snakefile"
 if execution["immune_response_individual"]:
     include: "./modules/immune_response/immune_response_individual.snakefile"
-if execution["immune_response_cohort"]:
-    include: "./modules/immune_response/immune_response_cohort.snakefile"
+#if execution["immune_response_cohort"]:
+    #include: "./modules/immune_response/immune_response_cohort.snakefile"
 if execution["immune_repertoire_individual"]:
     include: "./modules/immune_repertoire/immune_repertoire_individual.snakefile"
-if execution["immune_repertoire_cohort"]:
-    include: "./modules/immune_repertoire/immune_repertoire_cohort.snakefile"
+#if execution["immune_repertoire_cohort"]:
+    #include: "./modules/immune_repertoire/immune_repertoire_cohort.snakefile"
 if execution["neoantigen_individual"]:
     include: "./modules/neoantigen/neoantigen_individual.snakefile"
-if execution["neoantigen_cohort"]:
-    include: "./modules/neoantigen/neoantigen_cohort.snakefile"
+#if execution["neoantigen_cohort"]:
+    #include: "./modules/neoantigen/neoantigen_cohort.snakefile"
 if execution["microbiome_individual"]:
     include: "./modules/microbiome/microbiome_individual.snakefile"
-if execution["microbiome_cohort"]:
-    include: "./modules/microbiome/microbiome_cohort.snakefile"
-if execution["report"]:
-    include: "./modules/report/report.snakefile"
+#if execution["microbiome_cohort"]:
+    #include: "./modules/microbiome/microbiome_cohort.snakefile"
+#if execution["report"]:
+    #include: "./modules/report/report.snakefile"
