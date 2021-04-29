@@ -7,26 +7,13 @@ environment: false
 #Note: Preprocess individual and cohort module necessary to get the alignment and quality results. Run the remaining modules only after these two modules.
 preprocess_bam2fastq: false
 preprocess_individual: true
-preprocess_cohort: false
-
-#Note: The below modules are specialized modules, each dealing with specific targets. Make sure to run individual and cohort of each module to get all the results.
-differential_expression_cohort: true
-immune_infiltration_cohort: true
 mutation_individual: true
-mutation_cohort: false
 immune_response_individual: true
-immune_response_cohort: false
 immune_repertoire_individual: true
-immune_repertoire_cohort: false
 neoantigen_individual: true
-neoantigen_cohort: false
 microbiome_individual: true
-microbiome_cohort: false
-
-
 
 ##pvacseq
 pvacseq: false
 
-#Note: This module generates a standalone  HTML report. It shows the results from the modules that user decides to run. 
-report: false
+
