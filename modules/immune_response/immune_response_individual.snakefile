@@ -5,7 +5,7 @@
 
 def immune_response_individual_targets(wildcards):
     ls=[]
-    for run in config["samples"]:
+    for sample in config["samples"]:
             ls.append("analysis/msisensor/single/%s/%s_msisensor" % (sample, sample))
             ls.append("analysis/msisensor/single/%s/%s_msisensor_dis" % (sample, sample))
             ls.append("analysis/msisensor/single/%s/%s_msisensor_somatic" % (sample, sample))
