@@ -171,8 +171,8 @@ rule Size_downsampling:
     output:
         "analysis/rseqc/{sample}/{sample}.stat_tmp.txt"
     shell:
-        """chmod +x src/preprocess/ds_check_size.sh && """
-        """src/preprocess/ds_check_size.sh {input} {output} """
+        """chmod +x cidc_rima/src/preprocess/ds_check_size.sh && """
+        """cidc_rima/src/preprocess/ds_check_size.sh {input} {output} """
 
 rule bam_downsampling:
     input:
@@ -194,8 +194,8 @@ rule bam_downsampling:
     conda: "../envs/rseqc_env.yml"
     shell:
         """size=$(python -c "print(open('{input.stat_tmp}','r').readlines()[0].replace('\\n',''))") && """
-        """chmod +x src/preprocess/downsampling.sh && """
-        """src/preprocess/downsampling.sh {input.bam} $size && """
+        """chmod +x cidc_rima/src/preprocess/downsampling.sh && """
+        """cidc_rima/src/preprocess/downsampling.sh {input.bam} $size && """
         """mv {input.bam}*downsampling.bam {output.Downsampling_bam} && """
         """samtools index {output.Downsampling_bam} > {output.Downsampling_bai}"""
 

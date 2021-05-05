@@ -19,7 +19,7 @@ hg38:
 
 ###index path
   star_index: ./ref_files/star_gdc_index/hg38/v27_index/
-  star_fusion_index: ./ref_files/fusion_gdc_index/GRCh38_v22_CTAT_lib_GDC_Mar162019/ctat_genome_lib_build_dir
+  star_fusion_index: ./ref_files/fusion_gdc_index/ctat_genome_lib_build_dir
   salmon_index:  ./ref_files/new.v27.transcripts.fa
   msisensor_index: ./ref_files/msisensor_gdc_index/hg38/microsatellite.list
   centrifuge_index: ./ref_files/centrifuge_index/p_compressed+h+v
