@@ -6,29 +6,28 @@
 # !VERY IMPORTANT: you can OVERRIDE any of these values in config.yaml!
 
 hg38:
-###annotation path
-#fasta_path: ./ref_files/GRCh38.d1.vd1.fa 
-  fasta_path: ./ref_files/annotations/hg38/GRCh38.d1.vd1.CIDC.fa
+###annotation path 
+  fasta_path: ./ref_files/fasta_reference/hg38/GRCh38.d1.vd1.CIDC.fa
   gtf_path: ./ref_files/annotations/v27/gencode.v27.annotation.gtf
-  bed_path: ./ref_files/refseqGenes.bed
-  driver_bed_path: ./ref_files/driverGene_refseqGenes.bed
-  housekeeping_bed_path: ./ref_files/housekeeping_refseqGenes.bed
-  trust4_reper_path: ./ref_files/TRUST4/hg38_bcrtcr.fa
-  trust4_IMGT_path: ./ref_files/TRUST4/human_IMGT+C.fa
-  gmt_path: ./static/ssgsea/c2.cp.kegg.v6.1.symbols.gmt
+  bed_path: ./ref_files/annotations/bed/refseqGenes.bed
+  driver_bed_path: ./ref_files/annotations/bed/driverGene_refseqGenes.bed
+  housekeeping_bed_path: ./ref_files/annotations/bed/housekeeping_refseqGenes.bed
+  trust4_reper_path: ./ref_files/tools/TRUST4/hg38_bcrtcr.fa
+  trust4_IMGT_path: ./ref_files/tools/TRUST4/human_IMGT+C.fa
+  gmt_path: ./ref_files/static/ssgsea/c2.cp.kegg.v6.1.symbols.gmt
 
 ###index path
-  star_index: ./ref_files/star_gdc_index/hg38/v27_index/
-  star_fusion_index: ./ref_files/fusion_gdc_index/ctat_genome_lib_build_dir
-  salmon_index:  ./ref_files/new.v27.transcripts.fa
-  msisensor_index: ./ref_files/msisensor_gdc_index/hg38/microsatellite.list
+  star_index: ./ref_files/star_index/hg38/v27/
+  star_fusion_index: ./ref_files/fusion_index/v27/ctat_genome_lib_build_dir
+  salmon_index:  ./ref_files/fasta_reference/v27/new.v27.transcripts.fa
+  msisensor_index: ./ref_files/msisensor2_index/hg38/microsatellite.list
   centrifuge_index: ./ref_files/centrifuge_index/p_compressed+h+v
   neoantigen_iedb_mhcI: ./ref_files/
 
 ###tool path
-  msisensor2_path: ./ref_files/msisensor2
-  trust4_path: ./ref_files/TRUST4
-  arcasHLA_path: ./ref_files/arcasHLA
-  prada_path: ./ref_files/pyPRADA/pyPRADA_1.2
+  msisensor2_path: ./ref_files/tools/msisensor2
+  trust4_path: ./ref_files/tools/TRUST4
+  arcasHLA_path: ./ref_files/tools/arcasHLA
+  prada_path: ./ref_files/toolspyPRADA/pyPRADA_1.2
 
 
