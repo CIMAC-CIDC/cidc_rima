@@ -39,17 +39,20 @@ rule arcasHLA_extr_chr6:
      params:
          arcasHLA_path=config["arcasHLA_path"],
          outpath = "analysis/neoantigen/{sample}",
-         #outfile1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
-         #outfile2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
+         outfile1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
+         outfile2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
      shell:
         """{params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile}  -t {threads} -v -o {params.outpath}"""
         """ && cp {output.chr6fastqfile1} {output.outfile1}"""
         """ && cp {output.chr6fastqfile2} {output.outfile2}"""
 
+
 rule arcasHLA_genotype:
     input:
-        fastq1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
-        fastq2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
+        #fastq1 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.1.fq.gz",
+        #fastq2 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.2.fq.gz"
+        fq1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
+        fq2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
     output:
         "analysis/neoantigen/{sample}/{sample}.alignment.p",
         "analysis/neoantigen/{sample}/{sample}.genes.json",
@@ -59,7 +62,7 @@ rule arcasHLA_genotype:
         arcasHLA_path = config["arcasHLA_path"],
         outpath = "analysis/neoantigen/{sample}",
     shell:
-        """{params.arcasHLA_path}/arcasHLA genotype {input.fastq1} {input.fastq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
+        """{params.arcasHLA_path}/arcasHLA genotype {input.fq1} {input.fq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
 
 
       
