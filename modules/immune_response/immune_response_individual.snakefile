@@ -9,6 +9,7 @@ def immune_response_individual_targets(wildcards):
             ls.append("analysis/msisensor/single/%s/%s_msisensor" % (sample, sample))
             ls.append("analysis/msisensor/single/%s/%s_msisensor_dis" % (sample, sample))
             ls.append("analysis/msisensor/single/%s/%s_msisensor_somatic" % (sample, sample))
+            ls.append("analysis/msisensor/single/%s/%s_msisensor.txt" % (sample,sample))
     return ls
 
 
@@ -36,3 +37,13 @@ rule msisensor_tumor_call:
         msisensor2_path= config["msisensor2_path"],
     shell:
         "{params.msisensor2_path}/msisensor2 msi -M {params.msisensor2_path}/models_hg38 -t {input[0]} -o {params.prefix}"
+
+
+rule add_extension:
+    input:
+        "analysis/msisensor/single/{sample}/{sample}_msisensor"
+    output:
+        "analysis/msisensor/single/{sample}/{sample}_msisensor.txt",
+    shell:
+        "cp {input} {input}.txt"
+
