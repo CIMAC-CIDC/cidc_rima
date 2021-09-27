@@ -5,13 +5,13 @@ environment: false
 
 #------------Pipeline modules for RNA data--------------------#
 #Note: Preprocess individual and cohort module necessary to get the alignment and quality results. Run the remaining modules only after these two modules.
-preprocess_bam2fastq: false
-preprocess_individual: true
-mutation_individual: true
-immune_response_individual: true
-immune_repertoire_individual: true
-neoantigen_individual: true
-microbiome_individual: true
+preprocess_bam2fastq: true
+preprocess_individual: false
+mutation_individual: false
+immune_response_individual: false
+immune_repertoire_individual: false
+neoantigen_individual: false
+microbiome_individual: false
 
 ##pvacseq
 pvacseq: false
