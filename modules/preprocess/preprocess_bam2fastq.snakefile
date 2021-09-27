@@ -3,12 +3,11 @@ configfile: "config.yaml"
 def bam2fastq_targets(wildcards):
     ls = []
     for sample in config['samples']:
-        ls.append("data/fastqs/%s_1.fq" % sample)
+        ls.append("data/%s/%s_1.fq.gz" % (sample,sample))
     return ls
 
 def getBam(wildcards):
     sample = config['samples'][wildcards.sample]
-    #print(sample)
     return sample
 
 rule all:
@@ -19,8 +18,8 @@ rule bam2fastq:
     input:
         getBam
     output:
-        fq1="data/fastqs/{sample}_1.fq",
-        fq2="data/fastqs/{sample}_2.fq",
+        fq1="data/{sample}/{sample}_1.fq.gz",
+        fq2="data/{sample}/{sample}_2.fq.gz",
     threads: 4
     benchmark: "benchmarks/bam2fastq_{sample}.txt"
     shell:
