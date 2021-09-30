@@ -1,0 +1,3 @@
+WorkflowError in line 1 of /mnt/ssd/rima/cidc_rima/modules/preprocess/preprocess_bam2fastq.snakefile:
+Config file config.yaml not found.
+  File "/mnt/ssd/rima/cidc_rima/modules/preprocess/preprocess_bam2fastq.snakefile", line 1, in <module>

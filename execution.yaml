@@ -5,8 +5,9 @@ environment: false
 
 #------------Pipeline modules for RNA data--------------------#
 #Note: Preprocess individual and cohort module necessary to get the alignment and quality results. Run the remaining modules only after these two modules.
-preprocess_bam2fastq: true
-preprocess_individual: false
+preprocess_individual_step1: true
+#preprocess_bam2fastq: false
+preprocess_individual: true
 mutation_individual: false
 immune_response_individual: false
 immune_repertoire_individual: false

@@ -98,6 +98,10 @@ def all_targets(wildcards):
     ls = []
     if execution["environment"]:
         ls.extend(environment_targets(wildcards))
+    if execution["preprocess_individual_step1"]:
+        ls.extend(align_targets(wildcards))
+    #if execution["preprocess_bam2fastq"]:
+        #ls.extend(bam2fastq_targets(wildcards))
     if execution["preprocess_individual"]:
         ls.extend(preprocess_individual_targets(wildcards))
     #if execution["preprocess_cohort"]:
@@ -113,7 +117,7 @@ def all_targets(wildcards):
     if execution["immune_response_individual"]:
         ls.extend(immune_response_individual_targets(wildcards))
     #if execution["immune_response_cohort"]:
-        #ls.extend(immune_response_cohort_targets(wildcards))
+4/1AX4XfWjJPLUVr5SqMnZr1cQa8-DF1cRzvKXosJSaOs8NJFi-z5jRnnkNZgw        #ls.extend(immune_response_cohort_targets(wildcards))
     if execution["immune_repertoire_individual"]:
         ls.extend(immune_repertoire_individual_targets(wildcards))
     #if execution["immune_repertoire_cohort"]:
@@ -138,6 +142,10 @@ rule target:
 
 if execution["environment"]:
     include: "./modules/environment/environment.snakefile"
+if execution["preprocess_individual_step1"]:
+    include: "./modules/preprocess/preprocess_individual_step1.snakefile"
+#if execution["preprocess_bam2fastq"]:
+    #include: "./modules/preprocess/preprocess_bam2fastq.snakefile"
 if execution["preprocess_individual"]:
     include: "./modules/preprocess/preprocess_individual.snakefile"
 #if execution["preprocess_cohort"]:

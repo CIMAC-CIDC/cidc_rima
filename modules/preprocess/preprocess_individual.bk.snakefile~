@@ -105,7 +105,12 @@ rule bam_downsampling:
     output:
         Downsampling_bam = "analysis/star/{sample}/{sample}_downsampling.bam",
         Downsampling_bai = "analysis/star/{sample}/{sample}_downsampling.bam.bai"
-    message:
+    message:export CONDA_ROOT=/home/aashna/miniconda3
+export PATH=/home/aashna/miniconda3/bin:$PATH
+source activate rnaseq_new
+
+
+
         "Running Downsampling on {wildcards.sample}"
     log:
         "logs/star/{sample}.downsampling.log"

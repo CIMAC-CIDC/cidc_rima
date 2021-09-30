@@ -7,6 +7,8 @@ _preprocess_threads = 64
 import pandas as pd
 metadata = pd.read_csv(config["metasheet"], index_col=0, sep=',')
 
+###input data(compressed or not)
+gz_command = "--readFilesCommand zcat" if config["samples"][metadata.index[0]][0][-3:] == '.gz' else ""
 ###rseqc ref (housekeeping or not)
 rseqc_ref = config["housekeeping_bed_path"] if config["rseqc_ref"] == "house_keeping" else config["bed_path"]
 
@@ -34,6 +36,12 @@ def DownsamplingOrNot(bam_stat):
 def preprocess_individual_targets(wildcards):
     ls = []
     for sample in config["samples"]:
+        ls.append("analysis/star/%s/%s.unsorted.bam" % (sample,sample))
+        ls.append("analysis/star/%s/%s.sorted.bam" % (sample, sample))
+        ls.append("analysis/star/%s/%s.transcriptome.bam" % (sample, sample))
+        ls.append("analysis/star/%s/%s.Chimeric.out.junction" % (sample, sample))
+        ls.append("analysis/star/%s/%s.Log.final.out" % (sample, sample))
+        ls.append("analysis/star/%s/%s.counts.tab" % (sample, sample))
         ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
         ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
         ls.append("analysis/salmon/%s/%s.quant.sf" % (sample, sample))
@@ -68,7 +76,76 @@ def getHousekeepingBai(hk):
     else:
       return "analysis/star/{sample}/{sample}_downsampling.bam.bai"
 
-#---------------------BAM  alignment rules-------------------------#
+#---------------------STAR alignment rules-------------------------#
+rule star_align:
+  """star alignment for RNA-Seq raw data"""
+    input:
+        getFastq
+    output:
+        unsortedBAM = "analysis/star/{sample}/{sample}.unsorted.bam",
+        sortedBAM = "analysis/star/{sample}/{sample}.sorted.bam",
+        transcriptomeBAM = "analysis/star/{sample}/{sample}.transcriptome.bam",
+        junction_file = "analysis/star/{sample}/{sample}.Chimeric.out.junction",
+        counts = "analysis/star/{sample}/{sample}.counts.tab",
+        log_file = "analysis/star/{sample}/{sample}.Log.final.out"
+    params:
+        gz_support = gz_command,
+        prefix = lambda wildcards: "analysis/star/{sample}/{sample}".format(sample=wildcards.sample)
+    threads: _preprocess_threads
+    message:
+        "Running STAR Alignment on {wildcards.sample}"
+    log:
+        "logs/star/{sample}.star_align.log"
+    benchmark:
+        "benchmarks/star/{sample}.star_align.benchmark"
+    conda:
+        "../envs/star_env.yml"
+    shell:
+        "STAR --runThreadN {threads} --genomeDir {config[star_index]} "
+        "--outReadsUnmapped None "
+        "--chimSegmentMin 12 "
+        "--chimJunctionOverhangMin 12 "
+        "--chimOutJunctionFormat 1 "
+        "--alignSJDBoverhangMin 10 "
+        "--alignMatesGapMax 1000000 "
+        "--alignIntronMax 1000000 "
+        "--alignSJstitchMismatchNmax 5 -1 5 5 "
+        "--outSAMstrandField intronMotif "
+        "--outSAMunmapped Within "
+        "--outSAMtype BAM Unsorted "
+        "--readFilesIn {input} "
+        "--chimMultimapScoreRange 10 "
+        "--chimMultimapNmax 10 "
+        "--chimNonchimScoreDropMin 10 "
+        "--peOverlapNbasesMin 12 "
+        "--peOverlapMMp 0.1 "
+        "--genomeLoad NoSharedMemory "
+        "--outSAMheaderHD @HD VN:1.4 "
+        "--twopassMode Basic "
+        "{params.gz_support} "
+        "--outFileNamePrefix {params.prefix} "
+        "--quantMode TranscriptomeSAM GeneCounts"
+        " && mv {params.prefix}Aligned.out.bam {output.unsortedBAM}"
+        " && samtools sort -T {params.prefix}TMP -o {output.sortedBAM} -@ 8  {output.unsortedBAM} "
+        " && mv {params.prefix}Aligned.toTranscriptome.out.bam {output.transcriptomeBAM}"
+        " && mv {params.prefix}ReadsPerGene.out.tab {output.counts}"
+        " && mv {params.prefix}Chimeric.out.junction {output.junction_file}"
+        " && mv {params.prefix}Log.final.out {output.log_file}"
+
+rule index_bam:
+    """INDEX the {sample}.sorted.bam file"""
+    input:
+        "analysis/star/{sample}/{sample}.sorted.bam"
+    output:
+        "analysis/star/{sample}/{sample}.sorted.bam.bai"
+    message:
+        "Indexing {wildcards.sample}.sorted.bam"
+    benchmark:
+        "benchmarks/star/{sample}.index.benchmark"
+    conda:
+        "../envs/star_env.yml"
+    shell:
+        "samtools index {input} > {output}"
 
 rule align_bam_stat:
     input:
