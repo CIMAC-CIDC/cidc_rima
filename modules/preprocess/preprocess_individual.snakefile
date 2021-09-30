@@ -35,7 +35,7 @@ def preprocess_individual_targets(wildcards):
     ls = []
     for sample in config["samples"]:
         ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
-        ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
+        #ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
         ls.append("analysis/salmon/%s/%s.quant.sf" % (sample, sample))
         ls.append("analysis/rseqc/%s/%s.stat_tmp.txt" % (sample, sample))
         ls.append("analysis/rseqc/%s/%s_downsampling_housekeeping.bam" % (sample, sample))

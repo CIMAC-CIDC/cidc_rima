@@ -141,3 +141,4 @@ rule align_from_fastq:
       " && mv {params.prefix}ReadsPerGene.out.tab {output.counts}"
       " && mv {params.prefix}Chimeric.out.junction {output.junction_file}"
       " && mv {params.prefix}Log.final.out {output.log_file}"
+      " && samtools index {output.sortedBAM} {output.sortedbai}"
