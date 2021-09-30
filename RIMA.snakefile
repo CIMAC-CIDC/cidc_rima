@@ -117,7 +117,7 @@ def all_targets(wildcards):
     if execution["immune_response_individual"]:
         ls.extend(immune_response_individual_targets(wildcards))
     #if execution["immune_response_cohort"]:
-4/1AX4XfWjJPLUVr5SqMnZr1cQa8-DF1cRzvKXosJSaOs8NJFi-z5jRnnkNZgw        #ls.extend(immune_response_cohort_targets(wildcards))
+        #ls.extend(immune_response_cohort_targets(wildcards))
     if execution["immune_repertoire_individual"]:
         ls.extend(immune_repertoire_individual_targets(wildcards))
     #if execution["immune_repertoire_cohort"]:
