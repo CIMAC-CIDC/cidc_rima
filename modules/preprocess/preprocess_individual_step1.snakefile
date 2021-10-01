@@ -14,7 +14,7 @@ def align_targets(wildcards):
         ls.append("analysis/star/%s/%s.Chimeric.out.junction" % (sample, sample))
         ls.append("analysis/star/%s/%s.Log.final.out" % (sample, sample))
         ls.append("analysis/star/%s/%s.counts.tab" % (sample, sample))
-        ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
+        #ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
         #ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
     return ls
 
@@ -82,8 +82,8 @@ rule align_from_bam:
     input:
       align_getBam
     output:
-      fq1 = "analysis/star/{sample}/{sample}_R1.fq",
-      fq2 = "analysis/star/{sample}/{sample}_R2.fq",
+      fq1 = "analysis/align/{sample}/{sample}_1.fq",
+      fq2 = "analysis/align/{sample}/{sample}_2.fq",
       unsortedBAM = "analysis/star/{sample}/{sample}.unsorted.fromBam.bam",
       sortedBAM = "analysis/star/{sample}/{sample}.sorted.fromBam.bam",
       sortedbai="analysis/star/{sample}/{sample}.sorted.fromBam.bam.bai",
@@ -101,7 +101,8 @@ rule align_from_bam:
     benchmark: "benchmarks/align/{sample}/{sample}.align_from_bam.txt"
     shell:
       """samtools view -H {input} | grep \"^@RG\" > {wildcards.sample}.header"""
-      """&& samtools collate -@ 32 -Ouf {input} | samtools fastq -@ 32 -1 {output.fq1} -2 {output.fq2} -t -s /dev/null -0 /dev/null -|STAR --runThreadN {threads} --genomeDir {config[star_index]} --outReadsUnmapped None --chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimOutJunctionFormat 1 --alignSJDBoverhangMin 10 --alignMatesGapMax 1000000  --alignIntronMax 1000000 --alignSJstitchMismatchNmax 5 -1 5 5 --outSAMstrandField intronMotif --outSAMunmapped Within --outSAMtype BAM Unsorted --readFilesIn {output.fq1} {output.fq2} --chimMultimapScoreRange 10  --chimMultimapNmax 10  --chimNonchimScoreDropMin 10  --peOverlapNbasesMin 12 --peOverlapMMp 0.1 --genomeLoad NoSharedMemory --outSAMheaderHD @HD VN:1.4 --twopassMode Basic {params.gz_support} --outFileNamePrefix {params.prefix} --quantMode TranscriptomeSAM GeneCounts"""
+      """&& samtools collate  -@  32  -Ouf  {input}|samtools fastq  -@ 32  -1 {output.fq1}  -2 {output.fq2} -t -s /dev/null -0 /dev/null -"""
+      """&& STAR --runThreadN {threads} --genomeDir {config[star_index]} --outReadsUnmapped None --chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimOutJunctionFormat 1 -alignSJDBoverhangMin 10 --alignMatesGapMax 1000000 --alignIntronMax 1000000 --alignSJstitchMismatchNmax 5 -1 5 5 --outSAMstrandField intronMotif --outSAMunmapped Within --outSAMtype BAM Unsorted --readFilesIn {output.fq1} {output.fq2} --chimMultimapScoreRange 10 --chimMultimapNmax 10 --chimNonchimScoreDropMin 10 --peOverlapNbasesMin 12 --peOverlapMMp 0.1 --genomeLoad NoSharedMemory --outSAMheaderHD @HD VN:1.4 --twopassMode Basic {params.gz_support} --outFileNamePrefix {params.prefix} --quantMode TranscriptomeSAM GeneCounts"""
       """ && mv {params.prefix}Aligned.out.bam {output.unsortedBAM}"""
       """ && samtools sort -T {params.prefix}TMP -o {output.sortedBAM} -@ 32  {output.unsortedBAM} """
       """ && mv {params.prefix}Aligned.toTranscriptome.out.bam {output.transcriptomeBAM}"""
