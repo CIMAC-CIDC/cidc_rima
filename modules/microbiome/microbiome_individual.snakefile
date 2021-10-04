@@ -20,6 +20,7 @@ rule microbiome_individual_all:
 
 rule centrifuge_microbiota:
     input:
+        #add alignment files for bam2fastq
         "analysis/align/{sample}/{sample}_1.fq",
         "analysis/align/{sample}/{sample}_2.fq"
     output:
