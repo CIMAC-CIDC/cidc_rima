@@ -35,7 +35,7 @@ rule transfer_src:
     output:
         "rima_tx.src.txt"
     shell:
-        """gsutil -m cp -r cidc_rima/ {params.transfer_path} &&
+        """gsutil -m cp -r cidc_rima/src/  {params.transfer_path} &&
         touch {output}"""
 
 rule transfer_config_meta:
