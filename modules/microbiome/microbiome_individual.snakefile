@@ -5,9 +5,12 @@ _microbiome_threads= 32
 
 import pandas as pd
 
+<<<<<<< HEAD
 #def getFastq(wildcards):
 #    return config["samples"][wildcards.sample]
 
+=======
+>>>>>>> c093cc586ab51ff39f5e08f3541145c5295be85a
 
 def microbiome_individual_targets(wildcards):
     ls = []
@@ -23,7 +26,10 @@ rule microbiome_individual_all:
 
 rule centrifuge_microbiota:
     input:
+<<<<<<< HEAD
         #getFastq
+=======
+>>>>>>> c093cc586ab51ff39f5e08f3541145c5295be85a
         "analysis/align/{sample}/{sample}_1.fq",
         "analysis/align/{sample}/{sample}_2.fq"
     output:
