@@ -18,7 +18,7 @@ def neoantigen_individual_targets(wildcards):
         #ls.append("analysis/neoantigen/%s/%s.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/merge/%s.genotype.json" % (sample))
     return ls
-
+'analysis/neoantigen/CBUPI8R1Z.01/CBUPI8R1Z.01.alignment.p' is not a directory
 rule neoantigen_individual_all:
      input:
          neoantigen_individual_targets
