@@ -8,14 +8,14 @@ def neoantigen_individual_targets(wildcards):
     """Generates the targets for this module"""
     ls = []
     for sample in config["samples"]:
-        ls.append("analysis/neoantigen/%s/%s.1.fq.gz" % (sample,sample))
-        ls.append("analysis/neoantigen/%s/%s.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.alignment.p" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genes.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.log" % (sample,sample))
-        #ls.append("analysis/neoantigen/%s/%s.extracted.1.fq.gz" % (sample,sample))
-        #ls.append("analysis/neoantigen/%s/%s.extracted.2.fq.gz" % (sample,sample))
+        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.1.fq.gz" % (sample,sample))
+        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.2.fq.gz" % (sample,sample))
+        ls.append("analysis/neoantigen/%s/%s.extracted.1.fq.gz" % (sample,sample))
+        ls.append("analysis/neoantigen/%s/%s.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/merge/%s.genotype.json" % (sample))
     return ls
 
@@ -28,50 +28,43 @@ rule arcasHLA_extr_chr6:
      input:
          in_sortbamfile = "analysis/star/{sample}/{sample}.sorted.bam"
      output:
-         #chr6fastqfile1="analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
-         #chr6fastqfile2="analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz",
-         outfile1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
-         outfile2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
+         chr6fastqfile1="analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
+         chr6fastqfile2="analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
      threads: _neoantigen_individual_threads
      message: "Running ArcasHLA on {wildcards.sample}"
      log:
          "logs/neoantigen/{sample}.arcasHLA.log"
      params:
+         sampleID = lambda wildcards: [wildcards.sample],
          arcasHLA_path=config["arcasHLA_path"],
-         outpath = "analysis/neoantigen/{sample}/",
-         #outfile1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
-         #outfile2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz",
-         name = lambda wildcards: wildcards.sample,
-         path= "analysis/neoantigen/{sample}/"
+         outpath = "analysis/neoantigen/{sample}"
      shell:
-        """{params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile}  -t {threads} -v -o {params.outpath}"""
-        """ && cp {params.outpath}*.1.fq.gz  {params.path}/{params.name}.1.fq.gz"""
-        """ && cp {params.outpath}*.2.fq.gz   {params.path}/{params.name}.2.fq.gz"""
-
+        """{params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile} -t {threads} -v --sample {params.sampleID} -o {params.outpath}"""
+        
+#rule arcasHLA_fq_rename:
+#    input:
+#        chr6fastqfile1 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.1.fq.gz",
+#	chr6fastqfile2 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.2.fq.gz"
+#    output:
+#        outfile1 = "analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
+#        outfile2 = "analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
+#    shell:
+#        """cp {input.chr6fastqfile1} {output.outfile1} &&  cp {input.chr6fastqfile2} {output.outfile2}"""
 
 rule arcasHLA_genotype:
     input:
-        #fastq1 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.1.fq.gz",
-        #fastq2 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.2.fq.gz"
-        fq1 = "analysis/neoantigen/{sample}/{sample}.1.fq.gz",
-        fq2 = "analysis/neoantigen/{sample}/{sample}.2.fq.gz"
+        fastq1 = "analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
+        fastq2 = "analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
     output:
         "analysis/neoantigen/{sample}/{sample}.alignment.p",
         "analysis/neoantigen/{sample}/{sample}.genes.json",
         "analysis/neoantigen/{sample}/{sample}.genotype.json",
-        "analysis/neoantigen/{sample}/{sample}.genotype.log"       
+        "analysis/neoantigen/{sample}/{sample}.genotype.log"
     params:
         arcasHLA_path = config["arcasHLA_path"],
-        outpath = "analysis/neoantigen/{sample}/",
-        name = lambda wildcards: wildcards.sample,
-        path= "analysis/neoantigen/{sample}/"
+        outpath = "analysis/neoantigen/{sample}",
     shell:
-        """{params.arcasHLA_path}/arcasHLA genotype {input.fq1} {input.fq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath}"""
-        """ && cp {params.outpath}*.alignment.p  {params.outpath}{params.name}.alignment.p"""
-        """ && cp {params.outpath}*.genes.json  {params.outpath}{params.name}.genes.json"""
-        """ && cp {params.outpath}*.genotype.json  {params.outpath}{params.name}.genotype.json"""
-        """&& cp {params.outpath}*.genotype.log  {params.outpath}{params.name}.genotype.log"""
- 
+        """{params.arcasHLA_path}/arcasHLA genotype {input.fastq1} {input.fastq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
 
 
       
@@ -84,5 +77,3 @@ rule arcasHLA_relocate:
         outpath = "analysis/neoantigen/merge",
     shell:
         """cp {input} {params.outpath}"""
-
-
