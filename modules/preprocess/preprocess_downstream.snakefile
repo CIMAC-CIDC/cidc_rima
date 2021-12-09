@@ -60,8 +60,8 @@ def preprocess_individual_targets(wildcards):
         ls.append("analysis/rseqc/%s/%s_downsampling_housekeeping.bam" % (sample, sample))
         ls.append("analysis/rseqc/%s/%s_downsampling_housekeeping.bam.bai" % (sample, sample))
         ls.append("analysis/rseqc/read_distrib/%s/%s.txt" % (sample, sample))
-        ls.append("files/rseqc/gene_body_cvg/%s/%s.geneBodyCoverage.r" % (sample, sample))
-        ls.append("files/rseqc/junction_saturation/%s/%s.junctionSaturation_plot.pdf" % (sample, sample))
+        ls.append("analysis/rseqc/gene_body_cvg/%s/%s.geneBodyCoverage.r" % (sample, sample))
+        ls.append("analysis/rseqc/junction_saturation/%s/%s.junctionSaturation_plot.pdf" % (sample, sample))
         ls.append("analysis/rseqc/insert_size/%s/metrics/%s.insert_size_metrics.txt" % (sample, sample))
         ls.append("analysis/rseqc/tin_score/%s/%s.summary.txt" % (sample, sample))
         ls.append("analysis/rseqc/tin_score/%s/%s.tin_score.txt" % (sample, sample))
@@ -320,7 +320,7 @@ rule gene_body_cvg_qc:
         bam = getHousekeepingBam,
         bai = getHousekeepingBai
     output:
-        "files/rseqc/gene_body_cvg/{sample}/{sample}.geneBodyCoverage.r"
+        "analysis/rseqc/gene_body_cvg/{sample}/{sample}.geneBodyCoverage.r"
     threads: _preprocess_threads
     message:
         "Creating gene body coverage curves"
@@ -330,7 +330,7 @@ rule gene_body_cvg_qc:
         "benchmarks/rseqc/gene_body_cvg/{sample}.gene_body_cvg_qc.benchmark"
     params:
         bed_ref = rseqc_ref,
-        prefix = "files/rseqc/gene_body_cvg/{sample}/{sample}",
+        prefix = "analysis/rseqc/gene_body_cvg/{sample}/{sample}",
         path="set +eu;source activate %s" % config['rseqc_root'],
     conda: "../envs/rseqc_env.yml"
     shell:
@@ -342,7 +342,7 @@ rule junction_saturation:
         bam = getHousekeepingBam,
         bai = getHousekeepingBai
     output:
-        "files/rseqc/junction_saturation/{sample}/{sample}.junctionSaturation_plot.pdf"
+        "analysis/rseqc/junction_saturation/{sample}/{sample}.junctionSaturation_plot.pdf"
     message:
         "Determining junction saturation for {wildcards.sample}"
     benchmark:
@@ -350,7 +350,7 @@ rule junction_saturation:
     log:
         "logs/rseqc/junction_saturation/{sample}.junction_saturation.log"
     params:
-        prefix = "files/rseqc/junction_saturation/{sample}/{sample}",
+        prefix = "analysis/rseqc/junction_saturation/{sample}/{sample}",
         path="set +eu;source activate %s" % config['rseqc_root'],
     conda: "../envs/rseqc_env.yml"
     shell:

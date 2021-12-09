@@ -4,8 +4,8 @@
 
 def report_targets(wildcards):
     ls = []
-    ls.append("analysis/multiqc/QC_check/QC_status.txt")
-    ls.append("analysis/multiqc/QC_check/meta_information.csv")
+    ls.append("files/multiqc/QC_check/QC_status.txt")
+    ls.append("files/multiqc/QC_check/meta_information.csv")
     #ls.append("files/multiqc/immune_response/tide_table.txt")
     #ls.append("files/report/RIMA.analysis.html")
     return ls
@@ -21,21 +21,21 @@ rule QC_Check:
         star = "analysis/star/STAR_Align_Report.csv",
         tin = "analysis/rseqc/tin_score/tin_score_summary.txt"
     output:
-        QC_check = "analysis/multiqc/QC_check/QC_status.txt",
-        meta_info = "analysis/multiqc/QC_check/meta_information.csv"
+    QC_check = "anal/multiqc/QC_check/QC_status.txt",
+        meta_info = "files/multiqc/QC_check/meta_information.csv"
     message:
         "Checking the qulity of data"
     benchmark:
         "benchmarks/multiqc_QC/QC.benchmark"
     params:
         meta_file = config["metasheet"],
-        prefix = "analysis/multiqc/QC_check/",
+        prefix = "files/multiqc/QC_check/",
         path="set +eu;source activate %s" % config['stat_root'],
     log:
         "logs/multiqc/QC_check.log"
     conda: "../envs/stat_perl_r.yml"
     shell:
-        "{params.path}; Rscript cidc_rima/src/multiqc/QC_check.R -m {params.meta_file} -s {input.star} -d {input.distr} -t {input.tin} -o {params.prefix}"
+        "{params.path}; Rscript src/multiqc/QC_check.R -m {params.meta_file} -s {input.star} -d {input.distr} -t {input.tin} -o {params.prefix}"
 
         
 '''
