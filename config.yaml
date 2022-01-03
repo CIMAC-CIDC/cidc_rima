@@ -7,7 +7,7 @@ ref: ref.yaml
 assembly: hg38
 #Options are [ACC, BLCA, BRCA, CESC, CHOL, COAD, DLBC, ESCA, GBM, HNSC, KICH, KIRC, KIRP, LGG, LIHC, LUAD, LUSC, MESO, OV, PAAD, PCPG, PRAD, READ, SARC, SKCM, STAD, TGCT, THCA, THYM, UCEC, UCS, UVM]
 cancer_type: LUAD
-transfer_cohort_path: gs://repro_10026_jen/RNA/
+transfer_cohort_path: aashna@rima-auto-rima-10026-set1
 
 #########User defined parameters needed to run the modules################
 #------- preprocess  module--------#
