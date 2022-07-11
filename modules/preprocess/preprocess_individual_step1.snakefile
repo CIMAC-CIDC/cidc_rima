@@ -14,8 +14,8 @@ def align_targets(wildcards):
         ls.append("analysis/star/%s/%s.Chimeric.out.junction" % (sample, sample))
         ls.append("analysis/star/%s/%s.Log.final.out" % (sample, sample))
         ls.append("analysis/star/%s/%s.counts.tab" % (sample, sample))
-        #ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
-        #ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
+        ls.append("analysis/star/%s/%s.sorted.bam.stat.txt" % (sample, sample))
+        ls.append("analysis/star/%s/%s.sorted.bam.bai" % (sample, sample))
     return ls
 
 
@@ -46,8 +46,8 @@ def aggregate_align_input(wildcards):
 		"analysis/star/{sample}/{sample}.Log.final.fromBam.out",
 		"analysis/star/{sample}/{sample}.unsorted.fromBam.bam"]
     else:
-        return ["analysis/align/{sample}/{sample}.sorted.fromFastq.bam",
-                "analysis/align/{sample}/{sample}.sorted.fromFastq.bam.bai",
+        return ["analysis/star/{sample}/{sample}.sorted.fromFastq.bam",
+                "analysis/star/{sample}/{sample}.sorted.fromFastq.bam.bai",
                 "analysis/star/{sample}/{sample}.transcriptome.fromFastq.bam",
                 "analysis/star/{sample}/{sample}.Chimeric.out.fromFastq.junction",
                 "analysis/star/{sample}/{sample}.counts.fromFastq.tab",
@@ -135,7 +135,7 @@ rule align_from_fastq:
     conda:
       "../envs/star_env.yml"
     shell:
-      "STAR --runThreadN {threads} --genomeDir {config[star_index]} --outReadsUnmapped None --chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimOutJunctionFormat 1 --alignSJDBoverhangMin 10 --alignMatesGapMax 1000000  --alignIntronMax 1000000 --alignSJstitchMismatchNmax 5 -1 5 5 --outSAMstrandField intronMotif --outSAMunmapped Within --outSAMtype BAM Unsorted --readFilesIn {input} --chimMultimapScoreRange 10  --chimMultimapNmax 10  --chimNonchimScoreDropMin 10  --peOverlapNbasesMin 12 --peOverlapMMp 0.1 --genomeLoad NoSharedMemory --outSAMheaderHD @HD VN:1.4 --twopassMode Basic {params.gz_support} --outFileNamePrefix {params.prefix} --quantMode TranscriptomeSAM GeneCounts"
+      "STAR --runThreadN {threads} --genomeDir {config[star_index]} --outReadsUnmapped None --chimSegmentMin 12 --chimJunctionOverhangMin 12 --chimOutJunctionFormat 1 --alignSJDBoverhangMin 10 --alignMatesGapMax 1000000  --alignIntronMax 1000000 --alignSJstitchMismatchNmax 5 -1 5 5 --outSAMstrandField intronMotif --outSAMunmapped Within --outSAMtype BAM Unsorted --readFilesIn {input} --chimMultimapScoreRange 10  --chimMultimapNmax 10  --chimNonchimScoreDropMin 10  --peOverlapNbasesMin 12 --peOverlapMMp 0.1 --genomeLoad NoSharedMemory --outSAMheaderHD @HD VN:1.4 --twopassMode Basic {params.gz_support}  --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix {params.prefix}"
       " && mv {params.prefix}Aligned.out.bam {output.unsortedBAM}"
       " && samtools sort -T {params.prefix}TMP -o {output.sortedBAM} -@ 8  {output.unsortedBAM} "
       " && mv {params.prefix}Aligned.toTranscriptome.out.bam {output.transcriptomeBAM}"
@@ -143,3 +143,5 @@ rule align_from_fastq:
       " && mv {params.prefix}Chimeric.out.junction {output.junction_file}"
       " && mv {params.prefix}Log.final.out {output.log_file}"
       " && samtools index {output.sortedBAM} {output.sortedbai}"
+
+
