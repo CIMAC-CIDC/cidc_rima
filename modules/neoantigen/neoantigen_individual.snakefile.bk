@@ -2,7 +2,7 @@
 
 #-------------------------------Neoantigen individual module----------------#
 
-_neoantigen_individual_threads=32
+_neoantigen_individual_threads=16
 
 def neoantigen_individual_targets(wildcards):
     """Generates the targets for this module"""
@@ -12,6 +12,8 @@ def neoantigen_individual_targets(wildcards):
         ls.append("analysis/neoantigen/%s/%s.genes.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.log" % (sample,sample))
+        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.1.fq.gz" % (sample,sample))
+        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.extracted.1.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/merge/%s.genotype.json" % (sample))
@@ -29,16 +31,27 @@ rule arcasHLA_extr_chr6:
          chr6fastqfile1="analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
          chr6fastqfile2="analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
      threads: _neoantigen_individual_threads
-     benchmark: "benchmarks/neoantigen/{sample}/{sample}_arcasHLA_extract_chr6.benchmark"
      message: "Running ArcasHLA on {wildcards.sample}"
      log:
          "logs/neoantigen/{sample}.arcasHLA.log"
+     benchmark:
+        "benchmarks/neoantigen/{sample}/{sample}_arcasHLA_extract_chr6.benchmark"
      params:
          sampleID = lambda wildcards: [wildcards.sample],
          arcasHLA_path=config["arcasHLA_path"],
          outpath = "analysis/neoantigen/{sample}"
      shell:
         """{params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile} -t {threads} -v --sample {params.sampleID} -o {params.outpath}"""
+        
+#rule arcasHLA_fq_rename:
+#    input:
+#        chr6fastqfile1 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.1.fq.gz",
+#	chr6fastqfile2 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.2.fq.gz"
+#    output:
+#        outfile1 = "analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
+#        outfile2 = "analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
+#    shell:
+#        """cp {input.chr6fastqfile1} {output.outfile1} &&  cp {input.chr6fastqfile2} {output.outfile2}"""
 
 rule arcasHLA_genotype:
     input:
@@ -52,7 +65,8 @@ rule arcasHLA_genotype:
     params:
         arcasHLA_path = config["arcasHLA_path"],
         outpath = "analysis/neoantigen/{sample}",
-    benchmark: "benchmarks/neoantigen/{sample}/{sample}_arcasHLA_genotype.benchmark"    
+    benchmark:
+        "benchmarks/neoantigen/{sample}/{sample}.arcasHLA.genotype.benchmark"    
     shell:
         """{params.arcasHLA_path}/arcasHLA genotype {input.fastq1} {input.fastq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
 
@@ -65,6 +79,8 @@ rule arcasHLA_relocate:
         "analysis/neoantigen/merge/{sample}.genotype.json",
     params:
         outpath = "analysis/neoantigen/merge",
+    benchmark:
+        "benchmarks/neoantigen/{sample}_arcasHLA_merge.benchmar\
+k"
     shell:
         """cp {input} {params.outpath}"""
-

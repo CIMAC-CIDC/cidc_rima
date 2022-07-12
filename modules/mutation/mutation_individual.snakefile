@@ -40,8 +40,7 @@ rule STAR_fusion:
         "analysis/fusion/{sample}/{sample}.star_fusion.benchmark.txt"
     conda: "../envs/fusion_env.yml"
     shell:
-        "STAR-Fusion --chimeric_junction {input} "
-        "--genome_lib_dir {config[star_fusion_index]} --output_dir {params.prefix} >& {log}"
+        "STAR-Fusion --chimeric_junction {input} --genome_lib_dir {config[star_fusion_index]} --output_dir {params.prefix} --CPU 32"
         ##start from fastq
         # "STAR-Fusion --genome_lib_dir {config[star_fusion_index]} --left_fq {input.fqs[0]} {params.right_fq} {input.fqs[1]} --output_dir {params.prefix} "
         " && mv analysis/fusion/{wildcards.sample}/star-fusion.fusion_predictions.tsv {output.res}"

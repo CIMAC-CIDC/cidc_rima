@@ -1,36 +1,30 @@
-
-############################################################
-#                       General                            #
-############################################################
+#NOTE: you won't typically have to change the following two lines!
 metasheet: metasheet.csv
 ref: ref.yaml
 assembly: hg38
-#Options are [ACC, BLCA, BRCA, CESC, CHOL, COAD, DLBC, ESCA, GBM, HNSC, KICH, KIRC, KIRP, LGG, LIHC, LUAD, LUSC, MESO, OV, PAAD, PCPG, PRAD, READ, SARC, SKCM, STAD, TGCT, THCA, THYM, UCEC, UCS, UVM]
-cancer_type: LUAD
-transfer_cohort_path: aashna@rima-auto-rima-10026-set1
+bam_input: False
+# IF YOU ARE using snakemake remote files then you will need to set the
+# 'remote_path' parameter to your (google) bucket path.
+# **REMEMBER to add the / to the end of the path**
+#
+# OTHERWISE, if running locally, LEAVE it commented out
+# remote_path: "bucket_name/path/to/wes_project/"
 
-#########User defined parameters needed to run the modules################
+# The transfer bucket is used by the wes_automator transfer script to
+# tx the run AFTER a wes_automator run
+# transfer_bucket: "gs://some/bucket/path/wes_project/"
+transfer_path: gs://aashna_bucket/rima_automator/test4/
+
 #------- preprocess  module--------#
-#Possible values are [ff-firststrand, ff-secondstrand, ff-unstranded, fr-firststrand, fr-secondstrand, fr-unstranded (default), transfrags]
-library_type: 'fr-firststrand'
+#Possible values are [ff-firststrand, ff-secondstrand, ff-unstranded, fr-firststrand,fr-secondstrand, fr-unstranded (default), transfrags]
+library_type: fr-firststrand
 stranded: true
 rseqc_ref: house_keeping  #rseqc ref model
-mate: [1,2] #paired-end([1,2]) or single-end([0])
+mate: '[1,2]' #paired-end([1,2]) or single-end([0])
 
-############################################################
-#                     list samples                         #
-############################################################
+
 
 samples:
-  SAMPLE1:
-      - data/SAMPLE1_1.fq
-      - data/SAMPLE1_2.fq
-
-
-
-############################################################
-#                       run settings                       #
-############################################################
-#runs:
-#  run_SAMPLE1:
-#   - SAMPLE1
+  mda-r1-pt1-Tumor:
+    - data/Wistuba-CIMACRNAConcPilot2-Run1-MDA-4407-T-91a-T_CCW95ACXX-1-ACGCTCGA.R1.fq.gz
+    - data/Wistuba-CIMACRNAConcPilot2-Run1-MDA-4407-T-91a-T_CCW95ACXX-1-ACGCTCGA.R2.fq.gz
