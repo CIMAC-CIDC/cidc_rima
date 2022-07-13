@@ -2,7 +2,7 @@
 metasheet: metasheet.csv
 ref: ref.yaml
 assembly: hg38
-bam_input: False
+bam_only: False
 # IF YOU ARE using snakemake remote files then you will need to set the
 # 'remote_path' parameter to your (google) bucket path.
 # **REMEMBER to add the / to the end of the path**
