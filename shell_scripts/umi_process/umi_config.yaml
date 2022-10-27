@@ -1,0 +1,4 @@
+####Enter the sample path with the sample name
+samples:
+  RNA_01_16097-112_Tumor:
+      - /mnt/TCAP_data/data/16097-112_Tumor_RNA_01.duplicate_marked.coordinate_sorted.bam
