@@ -2,9 +2,7 @@
 
 #-------------------------------UMI module----------------#
 _umi_threads=16
-
 configfile: "umi_config.yaml"
-
 
 def umi_individual_targets(wildcards):
     """Generates the targets for this module"""
@@ -39,6 +37,6 @@ rule umi_extract:
      params:
          sampleID = lambda wildcards: [wildcards.sample],
          outpath = "analysis/umi/{sample}/",
-         path = "set +eu;source activate %s" % config['umi_root'],
+         path = "set +eu;source activate /home/aashna/miniconda3/envs/umi_env",
      shell:
           """{params.path};umi_tools group -I {input}  --group-out={output.grouped_tsv} --output-bam   --paired -S {output.bam} --umi-tag=RX --extract-umi-method=tag """
