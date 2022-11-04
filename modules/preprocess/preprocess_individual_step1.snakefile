@@ -46,8 +46,8 @@ def aggregate_align_input(wildcards):
 		"analysis/star/{sample}/{sample}.Log.final.fromBam.out",
 		"analysis/star/{sample}/{sample}.unsorted.fromBam.bam"]
     else:
-        return ["analysis/align/{sample}/{sample}.sorted.fromFastq.bam",
-                "analysis/align/{sample}/{sample}.sorted.fromFastq.bam.bai",
+        return ["analysis/star/{sample}/{sample}.sorted.fromFastq.bam",
+                "analysis/star/{sample}/{sample}.sorted.fromFastq.bam.bai",
                 "analysis/star/{sample}/{sample}.transcriptome.fromFastq.bam",
                 "analysis/star/{sample}/{sample}.Chimeric.out.fromFastq.junction",
                 "analysis/star/{sample}/{sample}.counts.fromFastq.tab",
