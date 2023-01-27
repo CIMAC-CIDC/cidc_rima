@@ -12,8 +12,6 @@ def neoantigen_individual_targets(wildcards):
         ls.append("analysis/neoantigen/%s/%s.genes.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.json" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.genotype.log" % (sample,sample))
-        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.1.fq.gz" % (sample,sample))
-        #ls.append("analysis/neoantigen/%s/%s.sorted.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.extracted.1.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/%s/%s.extracted.2.fq.gz" % (sample,sample))
         ls.append("analysis/neoantigen/merge/%s.genotype.json" % (sample))
@@ -37,20 +35,11 @@ rule arcasHLA_extr_chr6:
      params:
          sampleID = lambda wildcards: [wildcards.sample],
          arcasHLA_path=config["arcasHLA_path"],
-         outpath = "analysis/neoantigen/{sample}"
+         outpath = "analysis/neoantigen/{sample}",
+         path="set +eu;source activate %s" % config['arcasHLA_root'],
+     conda: "home/sudheshna/miniconda3/envs/arcasHLA_env.yml"
      shell:
-        """{params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile} -t {threads} -v --sample {params.sampleID} -o {params.outpath}"""
-        
-#rule arcasHLA_fq_rename:
-#    input:
-#        chr6fastqfile1 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.1.fq.gz",
-#	chr6fastqfile2 = "analysis/neoantigen/{sample}/{sample}.sorted.extracted.2.fq.gz"
-#    output:
-#        outfile1 = "analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
-#        outfile2 = "analysis/neoantigen/{sample}/{sample}.extracted.2.fq.gz"
-#    shell:
-#        """cp {input.chr6fastqfile1} {output.outfile1} &&  cp {input.chr6fastqfile2} {output.outfile2}"""
-
+        """{params.path}; {params.arcasHLA_path}/arcasHLA extract {input.in_sortbamfile} -t {threads} -v --sample {params.sampleID} -o {params.outpath}"""
 rule arcasHLA_genotype:
     input:
         fastq1 = "analysis/neoantigen/{sample}/{sample}.extracted.1.fq.gz",
@@ -63,8 +52,10 @@ rule arcasHLA_genotype:
     params:
         arcasHLA_path = config["arcasHLA_path"],
         outpath = "analysis/neoantigen/{sample}",
+        path="set +eu;source activate %s" % config['arcasHLA_root'],
+    conda: "home/sudheshna/miniconda3/envs/arcasHLA_env.yml"
     shell:
-        """{params.arcasHLA_path}/arcasHLA genotype {input.fastq1} {input.fastq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
+        """{params.path}; {params.arcasHLA_path}/arcasHLA genotype {input.fastq1} {input.fastq2} -g A,B,C,DQA1,DQB1,DRB1 -t 16 -v -o {params.outpath} """
 
 
       
@@ -77,3 +68,4 @@ rule arcasHLA_relocate:
         outpath = "analysis/neoantigen/merge",
     shell:
         """cp {input} {params.outpath}"""
+
