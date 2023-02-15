@@ -1,1 +1,0 @@
-RIMA_environment_install.md
